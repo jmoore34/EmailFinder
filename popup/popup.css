@@ -1,0 +1,21 @@
+h1 {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+h1, p {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+section, h1 {
+    margin: 8px 2px;
+    text-align: center;
+}
+
+button {
+    margin: 0 1.5ch;
+}
+
+section, textarea {
+    min-width: 30ch;
+}
