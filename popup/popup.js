@@ -6,11 +6,9 @@ browser.storage.local.get({ emails: ["no emails have been captured"] /* default 
 
 document.querySelector("reset").addEventListener("click", async () => {
     console.log("reset button pressed")
-    if (confirm("Are you sure you want to clear all emails?")) {
         browser.storage.local.set({ emails: [] }).then(() => {
             document.querySelector("textarea").innerText = ""
         }).catch(err => {
             alert(`Error while resetting emails: ${err}`)
         })
-    }
 })
