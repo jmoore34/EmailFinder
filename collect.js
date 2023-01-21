@@ -1,5 +1,5 @@
 document.body.style.border = "5px solid yellow";
-const emailRegex = /[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*/g
+const emailRegex = /[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)+/g
 const pageEmails = [...document.body.innerText.match(emailRegex)]
 console.log({pageEmails})
 
