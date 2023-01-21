@@ -4,7 +4,7 @@
   "name": "EmailFinder",
   "version": "1.0",
 
-  "description": "Collects emails on pages you visit",
+  "description": "Finds and stores emails on pages you visit",
 
   "content_scripts": [
     {
@@ -14,7 +14,6 @@
   ],
 
   "permissions": [
-    "clipboardWrite",
     "storage",
     "activeTab",
     "unlimitedStorage"
