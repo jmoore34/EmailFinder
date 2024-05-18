@@ -1,40 +1,65 @@
-document.body.style.border = "5px solid yellow";
-const emailRegex = /[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)+/g
-const pageEmails = [...document.body.innerText.match(emailRegex)]
-console.log({pageEmails})
+collect()
 
-browser.storage.local.get({emails: [] /* default to [] */ }).then(storage => {
-    // console.log({storage})
+const bannerClass = "emailFinderExtensionBanner"
 
-    const existingEmails = storage.emails
-
-    var allEmails = existingEmails.concat(pageEmails)
-
-    // console.log({existingEmails, allEmails})
-
-    // uniq
-    allEmails = [...new Set(allEmails)]
-
-    // sort
-    allEmails = allEmails.sort((a,b) => emailCompare(a,b))
-
-    browser.storage.local.set({ emails: allEmails }).then(
-        () => {
-            document.body.insertAdjacentHTML("afterbegin", `
-                <div style="background-color: red; color: white; padding: 8px;">
-                    <p style="color: white; font-size: 2em;">Found ${pageEmails.length} email${pageEmails.length == 1 ? "" : "s"}</h2>
-                    <p style="color: white">${pageEmails.join(", ")}</p>
-                </div>
-            `)
-            document.body.style.border = "5px solid red";
-        },
-        error => {
-            alert(`Error when saving emails: ${error}`)
-        }
-    )
-}, error => {
-    alert(`Error while reading existing email list: ${error}`)
+// scan again for emails whenever the user interacts with the page
+// (e.g. pulling up more emails w/o going to a new page)
+document.addEventListener("click", event => {
+    collect()
 })
+
+async function collect() {
+    browser.storage.local.get({ emails: [] }).then(storage => {
+
+        // remove existing banners we've already inserted
+        [...document.getElementsByClassName(bannerClass)].forEach(banner => banner.remove())
+
+        const emailRegex = /[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)+/g
+        const pageEmails = [...document.body.innerText.match(emailRegex)]
+        console.log({ pageEmails })
+
+        const existingEmails = storage.emails
+
+        var allEmails = existingEmails.concat(pageEmails)
+
+        // uniq
+        allEmails = [...new Set(allEmails)]
+
+        // sort
+        allEmails = allEmails.sort((a, b) => emailCompare(a, b))
+
+        browser.storage.local.set({ emails: allEmails }).then(
+            () => {
+                const emailListId = "emailList"
+                // XSS note: all interpolated values below are either constants, a length, or a string created from a length
+
+                const banner = document.createElement("div")
+                banner.className = bannerClass
+                banner.style.backgroundColor = "red"
+                banner.style.color = "white"
+                banner.style.padding = "8px"
+
+                const header = document.createElement("p")
+                header.style.color = "white"
+                header.style.fontSize = "2em"
+                header.innerText = `Found ${pageEmails.length} email${pageEmails.length == 1 ? "" : "s"}`
+                banner.appendChild(header)
+
+                const list = document.createElement("p")
+                list.style.color = "white"
+                list.innerText = pageEmails.join(", ")
+                banner.appendChild(list)
+
+                document.body.insertAdjacentElement("afterbegin", banner)
+            },
+            error => {
+                alert(`Error when saving emails: ${error}`)
+            }
+        )
+    }, error => {
+        alert(`Error while reading existing email list: ${error}`)
+    })
+}
 
 /// Sort emails first by text after @, then text before @
 function emailCompare(email1, email2) {

@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "EmailFinder",
-  "version": "1.0",
+  "version": "1.1",
 
   "description": "Finds and stores emails on pages you visit",
 
@@ -22,6 +22,13 @@
   "browser_action": {
     "default_title": "EmailFinder",
     "default_popup": "popup/popup.html"
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{1218bc46-2f71-40b7-bb61-89c41adade45}"
+    }
   }
+
 
 }
