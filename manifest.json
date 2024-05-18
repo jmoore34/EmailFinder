@@ -22,13 +22,5 @@
   "browser_action": {
     "default_title": "EmailFinder",
     "default_popup": "popup/popup.html"
-  },
-
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "{1218bc46-2f71-40b7-bb61-89c41adade45}"
-    }
   }
-
-
 }
